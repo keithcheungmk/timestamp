@@ -319,13 +319,8 @@
       </div>
 
       <div style="margin-top:12px">
-        <label>字體大小係數 <span id="sizeVal">3.5</span>%</label>
-        <input type="range" id="fontSize" min="1.2" max="5" step="0.1" value="3.5"/>
-      </div>
-
-      <div style="margin-top:12px">
-        <label>陰影強度 <span id="shadowVal">35</span>%</label>
-        <input type="range" id="shadowStr" min="0" max="100" step="1" value="35"/>
+        <label>字體大小係數 <span id="sizeVal">3.1</span>%</label>
+        <input type="range" id="fontSize" min="1.2" max="5" step="0.1" value="3.1"/>
       </div>
     </div>
 
@@ -448,9 +443,6 @@
   document.getElementById("fontSize").addEventListener("input", function() {
     document.getElementById("sizeVal").textContent = this.value;
   });
-  document.getElementById("shadowStr").addEventListener("input", function() {
-    document.getElementById("shadowVal").textContent = this.value;
-  });
   document.getElementById("textOpacity").addEventListener("input", function() {
     document.getElementById("opacityVal").textContent = this.value;
   });
@@ -494,11 +486,10 @@
 
     // Settings
     const fontSizePct = parseFloat(document.getElementById("fontSize").value) / 100;
-    const fontSize = Math.round(W * fontSizePct);           // base size for address + time value
-    const fontSizeLarge = Math.round(fontSize * 1.1);       // 10% larger for 網絡:/本地: labels only
-    const lineHTime = fontSizeLarge * 1.15;                 // line height for time lines
-    const lineHAddr = fontSize * 1.05;                      // tighter line height for address lines
-    const shadowAlpha = parseInt(document.getElementById("shadowStr").value) / 100;
+    const fontSize = Math.round(W * fontSizePct);
+    const fontSizeLarge = Math.round(fontSize * 1.05);
+    const lineHTime = fontSizeLarge * 1.05;   // tighter time line spacing
+    const lineHAddr = fontSize * 1.0;          // very tight address line spacing
     const textColorVal = document.getElementById("textColor").value;
     const textOpacity = parseInt(document.getElementById("textOpacity").value) / 100;
     const selectedFont = document.getElementById("fontSelect").value;
@@ -553,33 +544,21 @@
     // Helper: draw a single piece of text with stroke+shadow+fill
     function drawText(text, x, y, fs) {
       ctx.font = `normal ${fs}px "${selectedFont}", "Arial MT", Arial, sans-serif`;
-      ctx.textAlign = "left"; // always use absolute left-anchored positions
+      ctx.textAlign = "left";
 
-      // Step 1: thin dark stroke — no shadow on stroke
+      // Step 1: thin pure black stroke — hugs edges, creates natural 3D contrast
       ctx.shadowColor = "transparent";
       ctx.shadowBlur = 0;
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 0;
-      ctx.strokeStyle = `rgba(0,0,0,${0.35 * textOpacity})`;
-      ctx.lineWidth = fs * 0.08;
+      ctx.strokeStyle = `rgba(0,0,0,${textOpacity})`;
+      ctx.lineWidth = fs * 0.03;
       ctx.lineJoin = "round";
       ctx.strokeText(text, x, y);
 
-      // Step 2: shadow on fill only — positive offsetY = shadow falls BELOW = light from TOP
-      ctx.shadowColor = `rgba(0,0,0,${shadowAlpha * textOpacity})`;
-      ctx.shadowBlur = fs * 0.08;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = fs * 0.08;   // positive = downward shadow = light source from top
-
-      // Step 3: fill
+      // Step 2: pure white fill — clean, no shadow, no highlight
       ctx.fillStyle = `rgba(${r},${g},${b},${textOpacity})`;
       ctx.fillText(text, x, y);
-
-      // Reset shadow
-      ctx.shadowColor = "transparent";
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
     }
 
     // Force left-align for all manual positioning
@@ -665,7 +644,7 @@
   }
 
   // Live preview on input changes (re-render if image loaded)
-  ["addressInput","datetimeInput","tzInput","textColor","fontSize","shadowStr","textOpacity","fontSelect"].forEach(id => {
+  ["addressInput","datetimeInput","tzInput","textColor","fontSize","textOpacity","fontSelect"].forEach(id => {
     document.getElementById(id).addEventListener("input", () => {
       if (loadedImage && !document.getElementById("renderBtn").disabled) renderStamp();
     });
