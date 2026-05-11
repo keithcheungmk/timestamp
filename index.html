@@ -545,18 +545,18 @@
     function drawText(text, x, y, fs) {
       ctx.font = `normal ${fs}px "${selectedFont}", "Arial MT", Arial, sans-serif`;
       ctx.textAlign = "left";
-
-      // Step 1: thin pure black stroke — hugs edges, creates natural 3D contrast
       ctx.shadowColor = "transparent";
       ctx.shadowBlur = 0;
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 0;
-      ctx.strokeStyle = `rgba(0,0,0,${textOpacity})`;
-      ctx.lineWidth = fs * 0.03;
-      ctx.lineJoin = "round";
-      ctx.strokeText(text, x, y);
 
-      // Step 2: pure white fill — clean, no shadow, no highlight
+      // Step 1: pure black bottom layer — offset right+UP
+      // light from bottom-left = shadow falls top-right
+      const offset = fs * 0.02;
+      ctx.fillStyle = `rgba(0,0,0,${textOpacity})`;
+      ctx.fillText(text, x + offset, y - offset);
+
+      // Step 2: pure white top layer — covers most of black layer
       ctx.fillStyle = `rgba(${r},${g},${b},${textOpacity})`;
       ctx.fillText(text, x, y);
     }
