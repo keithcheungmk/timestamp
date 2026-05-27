@@ -456,8 +456,7 @@
     const fontSize = Math.round(W * fontSizePct);
     const fontSizeLarge = Math.round(fontSize * 1.05);
     const lineHTime = fontSizeLarge * 1.05;
-    // CHANGE 2: address line height increased by 2% (1.0 -> 1.02)
-    const lineHAddr = fontSize * 1.02;
+    const lineHAddr = fontSize * 1.04;
     const textColorVal = document.getElementById("textColor").value;
     const textOpacity = parseInt(document.getElementById("textOpacity").value) / 100;
     const selectedFont = document.getElementById("fontSelect").value;
@@ -529,6 +528,7 @@
       currentY += line.lineH;
 
       if (line.type === "split") {
+        ctx.letterSpacing = "1px";
         ctx.font = `normal ${fontSizeLarge}px "${selectedFont}", "Arial MT", Arial, sans-serif`;
         const labelW = ctx.measureText(line.label).width;
         ctx.font = `normal ${fontSize}px "${selectedFont}", "Arial MT", Arial, sans-serif`;
@@ -549,6 +549,7 @@
 
       } else {
         let lineStartX;
+        ctx.letterSpacing = "0px";
         if (isRight) {
           ctx.font = `normal ${fontSize}px "${selectedFont}", "Arial MT", Arial, sans-serif`;
           const tw = ctx.measureText(line.text).width;
