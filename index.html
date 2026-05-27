@@ -489,7 +489,7 @@
     const fontSize = Math.round(W * fontSizePct);
     const fontSizeLarge = Math.round(fontSize * 1.05);
     const lineHTime = fontSizeLarge * 1.05;   // tighter time line spacing
-    const lineHAddr = fontSize * 1.0;          // very tight address line spacing
+    const lineHAddr = fontSize * 1.02;          // very tight address line spacing
     const textColorVal = document.getElementById("textColor").value;
     const textOpacity = parseInt(document.getElementById("textOpacity").value) / 100;
     const selectedFont = document.getElementById("fontSelect").value;
@@ -506,8 +506,8 @@
     // type: "split" = label drawn bigger + value drawn normal on same line
     // type: "plain" = single text at fontSize
     const stampLines = [
-      { type: "split", label: "網絡: ", value: timeStr, lineH: lineHTime },
-      { type: "split", label: "本地: ", value: timeStr, lineH: lineHTime },
+      { type: "split", label: "網絡:", value: timeStr, lineH: lineHTime },
+      { type: "split", label: "本地:", value: timeStr, lineH: lineHTime },
       ...addrLines.map(l => ({ type: "plain", text: l, lineH: lineHAddr })),
     ];
 
